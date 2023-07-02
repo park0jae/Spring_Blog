@@ -35,4 +35,14 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Board> boards = new ArrayList<>();
+
+    public void updateMember(Board board){
+        boards.add(board);
+    }
+
+    public void update(String username, String password, String email){
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 }

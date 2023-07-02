@@ -35,4 +35,18 @@ public class Board extends BaseEntity {
 
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Reply> replies;
+
+    public Board(String title, String content, Member member){
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        member.updateMember(this);
+    }
+
+    // update Board
+    public void update(String title, String content){
+        this.title=title;
+        this.content=content;
+        this.member.updateMember(this);
+    }
 }
