@@ -9,6 +9,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -31,13 +32,40 @@ public class Member extends BaseEntity {
     private String email;
 
     @OneToMany(mappedBy = "member" )
-    private List<MemberRole> memberRoles = new ArrayList<>();
+    private List<MemberRole> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Board> boards = new ArrayList<>();
 
+    String provider;
+
     public void updateMember(Board board){
         boards.add(board);
+    }
+
+    public Member(String username, String password,   String provider,  List<Role> roles, List<Board> boards) {
+        this.username = username;
+        this.password = password;
+        this.provider = provider;
+        initPosts(boards);
+        addRoles(roles);
+    }
+
+    private void addRoles(List<Role> roles) {
+        List<MemberRole> roleList = roles.stream().map(role -> new MemberRole(this, role)).collect(Collectors.toList());
+        this.roles = roleList;
+    }
+
+
+    private void initPosts(List<Board> posts) {
+        if (!posts.isEmpty()) {
+            posts.stream().forEach(
+                    p -> {
+                        posts.add(p);
+                        p.initMember(this);
+                    }
+            );
+        }
     }
 
     public void update(String username, String password, String email){
@@ -45,4 +73,6 @@ public class Member extends BaseEntity {
         this.password = password;
         this.email = email;
     }
+
+
 }

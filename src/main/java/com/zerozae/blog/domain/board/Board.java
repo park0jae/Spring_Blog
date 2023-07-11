@@ -43,6 +43,13 @@ public class Board extends BaseEntity {
         member.updateMember(this);
     }
 
+    public void initMember(Member member) {
+        if (this.member == null) {
+            this.member = member;
+        }
+    }
+
+
     // update Board
     public void update(String title, String content){
         this.title=title;
