@@ -23,49 +23,33 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, length = 30)
-    private String username; // 아이디
+    private String username;
 
-    @Column(nullable = false, length = 100) // => 비밀번호 암호화 할 예정이므로 넉넉하게 잡아줌
+    @Column(nullable = false, length = 100)
     private String password;
 
     @Column(nullable = false, length = 50)
     private String email;
 
-    @OneToMany(mappedBy = "member" )
-    private List<MemberRole> roles = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<Board> boards = new ArrayList<>();
+    private String nickname;
 
     String provider;
 
-    public void updateMember(Board board){
-        boards.add(board);
-    }
+    @OneToMany(mappedBy = "member" )
+    private List<MemberRole> roles = new ArrayList<>();
 
-    public Member(String username, String password,   String provider,  List<Role> roles, List<Board> boards) {
+    public Member(String username, String password,  String email, String nickname,  String provider,  List<Role> roles) {
         this.username = username;
         this.password = password;
+        this.email = email;
+        this.nickname = nickname;
         this.provider = provider;
-        initPosts(boards);
         addRoles(roles);
     }
 
     private void addRoles(List<Role> roles) {
         List<MemberRole> roleList = roles.stream().map(role -> new MemberRole(this, role)).collect(Collectors.toList());
         this.roles = roleList;
-    }
-
-
-    private void initPosts(List<Board> posts) {
-        if (!posts.isEmpty()) {
-            posts.stream().forEach(
-                    p -> {
-                        posts.add(p);
-                        p.initMember(this);
-                    }
-            );
-        }
     }
 
     public void update(String username, String password, String email){
