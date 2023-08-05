@@ -23,8 +23,6 @@ public class JwtFilter extends GenericFilterBean {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private final TokenProvider tokenProvider;
 
-    // 인증/인가가 필요한 요청시 실행하는 필터
-    // 토큰 검증 -> 인증정보 SecurityContext에 저장
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
@@ -42,7 +40,6 @@ public class JwtFilter extends GenericFilterBean {
         } else {
             log.debug("유효하지 않은 JWT입니다.");
         }
-
         chain.doFilter(request, response);
     }
 
@@ -50,7 +47,6 @@ public class JwtFilter extends GenericFilterBean {
         String Bearer_token = request.getHeader(AUTHORIZATION_HEADER);
         return extractToken(Bearer_token);
     }
-
     private String extractToken(String bearer_token) {
         if (StringUtils.hasText(bearer_token) && bearer_token.startsWith("Bearer ")) {
             return bearer_token.substring(7);

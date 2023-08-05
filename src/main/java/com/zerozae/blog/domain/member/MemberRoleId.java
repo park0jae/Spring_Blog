@@ -9,4 +9,14 @@ import java.io.Serializable;
 public class MemberRoleId implements Serializable {
     private Member member;
     private Role role;
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

@@ -25,7 +25,6 @@ public class TokenProvider {
     private static final String AUTH_KEY = "AUTHORITY";
     private static final String AUTH_ID = "ID";
     private static final String AUTH_USERNAME = "USERNAME";
-
     private final long tokenValidityMilliSeconds;
     private final String originSecretKey;
 

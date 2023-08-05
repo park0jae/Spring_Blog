@@ -5,6 +5,8 @@ import com.zerozae.blog.domain.member.Member;
 import com.zerozae.blog.domain.reply.Reply;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -29,18 +31,16 @@ public class Board extends BaseEntity {
     @ColumnDefault("0")
     private int count;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<Reply> replies;
 
     public Board(String title, String content, Member member){
         this.title = title;
         this.content = content;
         this.member = member;
-        member.updateMember(this);
     }
 
     public void initMember(Member member) {
@@ -54,6 +54,5 @@ public class Board extends BaseEntity {
     public void update(String title, String content){
         this.title=title;
         this.content=content;
-        this.member.updateMember(this);
     }
 }
