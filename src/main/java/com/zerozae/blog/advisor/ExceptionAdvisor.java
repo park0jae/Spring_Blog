@@ -4,6 +4,9 @@ import com.zerozae.blog.dto.response.Response;
 import com.zerozae.blog.exception.ValidateTokenException;
 import com.zerozae.blog.exception.auth.AccessDeniedException;
 import com.zerozae.blog.exception.auth.AuthenticationEntryPointException;
+import com.zerozae.blog.exception.auth.LoginFailureException;
+import com.zerozae.blog.exception.member.DuplicateNicknameException;
+import com.zerozae.blog.exception.member.DuplicateUsernameException;
 import com.zerozae.blog.exception.member.MemberNotFoundException;
 import com.zerozae.blog.exception.role.RoleNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,13 @@ public class ExceptionAdvisor {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Response roleNotFoundException(RoleNotFoundException e){
         return Response.failure(404, "권한을 찾을 수 없습니다.");
+    }
+
+    // auth
+    @ExceptionHandler(LoginFailureException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Response loginFailureException(LoginFailureException e){
+        return Response.failure(409, "로그인에 실패했습니다.");
     }
 
     @ExceptionHandler(ValidateTokenException.class)
@@ -44,4 +54,18 @@ public class ExceptionAdvisor {
     public Response memberNotFoundException(MemberNotFoundException e){
         return Response.failure(404, "해당 유저를 찾을 수 없습니다.");
     }
+
+    @ExceptionHandler(DuplicateUsernameException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Response duplicateUsernameException(DuplicateUsernameException e){
+        return Response.failure(409, "이미 존재하는 계정입니다.");
+    }
+
+    @ExceptionHandler(DuplicateNicknameException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Response duplicateNicknameException(DuplicateNicknameException e){
+        return Response.failure(409, "이미 존재하는 닉네임 입니다.");
+    }
+
+
 }

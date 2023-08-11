@@ -28,20 +28,18 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(nullable = false, length = 50)
-    private String email;
-
+    @Column(nullable = false)
     private String nickname;
 
+    @Column(nullable = false)
     String provider;
 
     @OneToMany(mappedBy = "member" )
     private List<MemberRole> roles = new ArrayList<>();
 
-    public Member(String username, String password,  String email, String nickname,  String provider,  List<Role> roles) {
+    public Member(String username, String password, String nickname,  String provider,  List<Role> roles) {
         this.username = username;
         this.password = password;
-        this.email = email;
         this.nickname = nickname;
         this.provider = provider;
         addRoles(roles);
@@ -52,10 +50,9 @@ public class Member extends BaseEntity {
         this.roles = roleList;
     }
 
-    public void update(String username, String password, String email){
-        this.username = username;
+    public void update(String password, String nickname){
         this.password = password;
-        this.email = email;
+        this.nickname = nickname;
     }
 
 
